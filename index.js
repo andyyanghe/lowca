@@ -2,11 +2,12 @@ window.onload = () => {
   let imgInfo = [
     {
       id: 1,
-      authorName: 'Tobi',
+      authorName: 'Tobi111',
       authorNickname: 'Murnau',
       imgSrc: 'https://images.pexels.com/photos/620337/pexels-photo-620337.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
       authorImgSrc: 'https://images.pexels.com/users/avatars/153731/tobi-dami-228.jpeg?auto=compress&fit=crop&h=40&w=40&dpr=1',
       autorgalleryList: [
+        'https://pan.baidu.com/s/18QFcZVYuwjmczwsJe8EK4g?pwd=33fp',
         'https://images.pexels.com/photos/567952/pexels-photo-567952.jpeg?auto=compress&cs=tinysrgb&w=120&h=90&fit=crop&dpr=1',
         'https://images.pexels.com/photos/713070/pexels-photo-713070.jpeg?auto=compress&cs=tinysrgb&w=120&h=90&fit=crop&dpr=1',
         'https://images.pexels.com/photos/631988/pexels-photo-631988.jpeg?auto=compress&cs=tinysrgb&w=120&h=90&fit=crop&dpr=1',

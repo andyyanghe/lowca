@@ -38,9 +38,9 @@ window.onload = () => {
     'https://images.pexels.com/photos/1496373/pexels-photo-1496373.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
   ];
   // 假装我有很多图片
-  for (let i = 0; i < 4; i++) {
-    imgInfo = [...imgInfo, ...imgInfo];
-  }
+  // for (let i = 0; i < 4; i++) {
+  //   imgInfo = [...imgInfo, ...imgInfo];
+  // }
 
   // 图片预览功能
   let currentIndex = 0;

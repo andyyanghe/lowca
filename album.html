@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>温馨时光 · 回忆拾光相册</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: linear-gradient(120deg, #ffe9e3 0%, #fffde4 40%, #fbc2eb 70%, #fda085 100%);
+      font-family: 'Segoe UI', 'PingFang SC', 'Microsoft Yahei', Arial, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      color: #333;
+      overflow-x: hidden;
+      position: relative;
+    }
+    /* 装饰性渐变圆和动态气泡 */
+    .bg-deco {
+      position: fixed;
+      z-index: 0;
+      border-radius: 50%;
+      filter: blur(40px);
+      opacity: 0.5;
+      pointer-events: none;
+      animation: float 8s infinite alternate ease-in-out;
+    }
+    .deco1 { width: 320px; height: 320px; left: -80px; top: 60px; background: radial-gradient(circle, #fffde4 0%, #ffe9e3 100%); }
+    .deco2 { width: 180px; height: 180px; right: 40px; top: 120px; background: radial-gradient(circle, #fbc2eb 0%, #fda085 100%); }
+    .deco3 { width: 220px; height: 220px; left: 60px; bottom: 60px; background: radial-gradient(circle, #fffde4 0%, #fbc2eb 100%); }
+    .deco4 { width: 120px; height: 120px; right: 80px; bottom: 40px; background: radial-gradient(circle, #f6d365 0%, #ffe9e3 100%); }
+    @keyframes float {
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(-30px) scale(1.08); }
+    }
+    /* 动态气泡 */
+    .bubble {
+      position: fixed;
+      border-radius: 50%;
+      opacity: 0.18;
+      pointer-events: none;
+      z-index: 1;
+      animation: bubbleMove 12s infinite linear;
+      background: radial-gradient(circle, #fff 0%, #0ba29d 100%);
+    }
+    .bubble1 { width: 60px; height: 60px; left: 10vw; top: 80vh; animation-delay: 0s; }
+    .bubble2 { width: 40px; height: 40px; left: 30vw; top: 85vh; animation-delay: 2s; }
+    .bubble3 { width: 80px; height: 80px; left: 70vw; top: 90vh; animation-delay: 4s; }
+    .bubble4 { width: 50px; height: 50px; left: 80vw; top: 88vh; animation-delay: 6s; }
+    .bubble5 { width: 35px; height: 35px; left: 50vw; top: 92vh; animation-delay: 8s; }
+    @keyframes bubbleMove {
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(-100vh) scale(1.2); }
+    }
+    /* 渐变光斑 */
+    .spot {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(60px);
+      opacity: 0.25;
+      background: radial-gradient(circle, #fffde4 0%, #fda085 100%);
+    }
+    .spot1 { width: 180px; height: 180px; left: 40vw; top: 10vh; background: radial-gradient(circle, #fffde4 0%, #fbc2eb 100%); }
+    .spot2 { width: 120px; height: 120px; left: 80vw; top: 30vh; background: radial-gradient(circle, #fda085 0%, #ffe9e3 100%); }
+    .album-title {
+      text-align: center;
+      padding: 2.2em 0 1.2em 0;
+      font-size: 3em;
+      font-family: 'ZCOOL QingKe HuangYou', cursive, 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(90deg, #0ba29d 10%, #fbc2eb 40%, #f6d365 60%, #a6c1ee 90%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: #fff;
+      letter-spacing: 6px;
+      font-weight: bold;
+      position: relative;
+      border-bottom: 2px dashed #a6c1ee;
+      /* 多重发光描边 */
+      text-shadow:
+        0 0 24px #fffde4,
+        0 2px 18px #0ba29d,
+        0 0 40px #fbc2eb,
+        0 0 60px #f6d365,
+        0 0 8px #a6c1ee;
+      /* 动态描边动画 */
+      animation: titleGlow 2.5s infinite alternate, gradientFlow 6s linear infinite;
+      /* 立体感 */
+      text-stroke: 2px #fffde4;
+      -webkit-text-stroke: 2px #fffde4;
+      /* 让文字有流动渐变效果 */
+      background-size: 200% 200%;
+    }
+    @keyframes titleGlow {
+      0% {
+        text-shadow:
+          0 0 24px #fffde4,
+          0 2px 18px #0ba29d,
+          0 0 40px #fbc2eb,
+          0 0 60px #f6d365,
+          0 0 8px #a6c1ee;
+      }
+      100% {
+        text-shadow:
+          0 0 40px #fbc2eb,
+          0 2px 32px #0ba29d,
+          0 0 60px #fffde4,
+          0 0 24px #f6d365,
+          0 0 16px #a6c1ee;
+      }
+    }
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+    .album-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2em;
+      padding: 2em;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .album-card {
+      background: rgba(255,255,255,0.9);
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+      position: relative;
+    }
+    .album-card:hover {
+      transform: scale(1.03) rotate(-2deg);
+      box-shadow: 0 8px 32px rgba(34,193,195,0.20);
+      z-index: 2;
+    }
+    .album-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      filter: brightness(0.98) saturate(1.2);
+      transition: filter 0.4s;
+    }
+    .album-card:hover img {
+      filter: brightness(1.1) saturate(1.5) blur(1px);
+    }
+    .caption {
+      padding: 1em;
+      font-size: 1.07em;
+      font-family: 'ZCOOL QingKe HuangYou', cursive, 'Segoe UI';
+      color: #6ab7a8;
+      text-align: center;
+      background: rgba(255,255,255,0.85);
+      border-top: 1px dashed #e0f7fa;
+    }
+    /* 炫酷模态预览 */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 99;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      background: rgba(34,193,195,0.20);
+      backdrop-filter: blur(8px);
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.5s;
+    }
+    .modal.active {
+      display: flex;
+    }
+    .modal-content {
+      background: rgba(255,255,255,0.96);
+      border-radius: 18px;
+      box-shadow: 0 4px 40px rgba(0,0,0,0.10);
+      max-width: 90vw;
+      max-height: 80vh;
+      /* overflow: auto; */
+      padding: 2em;
+      text-align: center;
+      position: relative;
+      animation: scaleUp 0.5s;
+    }
+    .modal-content img {
+      max-width: 100%;
+      max-height: 60vh;
+      border-radius: 10px;
+      margin-bottom: 1.2em;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    }
+    /* modal-caption 居中显示 */
+    .modal-caption {
+      font-size: 1.15em;
+      color: #26a69a;
+      margin: 0 1em;
+      flex: 1;
+      text-align: center;
+    }
+    .close-btn {
+      position: absolute;
+      top: 1em;
+      right: 1.5em;
+      font-size: 2em;
+      color: #0ba29d;
+      cursor: pointer;
+      transition: color 0.2s;
+      font-weight: bold;
+      background: none;
+      border: none;
+    }
+    .close-btn:hover {
+      color: #d32f2f;
+    }
+    @keyframes scaleUp {
+      from { transform: scale(0.85); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @media (max-width: 600px) {
+      .album-card img { height: 160px; }
+      .modal-content { padding: 1em; }
+    }
+    /* 优化模态框导航按钮布局 */
+    .modal-nav-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      min-width: 320px;
+      max-width: 600px;
+      margin: 0 auto 0 auto;
+      height: auto;
+    }
+    .nav-btn {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #0ba29d 10%, #fbc2eb 90%);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 12px rgba(34,193,195,0.12);
+      cursor: pointer;
+      transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+      outline: none;
+      position: static;
+      font-family: inherit;
+      font-weight: bold;
+      padding: 0;
+    }
+    #prevImg.nav-btn {
+      /* 无需定位 */
+    }
+    #nextImg.nav-btn {
+      /* 无需定位 */
+    }
+    @media (max-width: 600px) {
+      .modal-nav-row {
+        min-width: 0;
+        max-width: 100vw;
+        padding: 0 0.5em;
+      }
+      .nav-btn {
+        width: 38px;
+        height: 38px;
+        font-size: 1.4em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 装饰性渐变圆和气泡 -->
+  <div class="bg-deco deco1"></div>
+  <div class="bg-deco deco2"></div>
+  <div class="bg-deco deco3"></div>
+  <div class="bg-deco deco4"></div>
+  <div class="bubble bubble1"></div>
+  <div class="bubble bubble2"></div>
+  <div class="bubble bubble3"></div>
+  <div class="bubble bubble4"></div>
+  <div class="bubble bubble5"></div>
+  <div class="spot spot1"></div>
+  <div class="spot spot2"></div>
+  <div class="album-title">回忆流光 · 梦想拾影</div>
+  <div class="album-grid" id="albumGrid">
+    <!-- JS 渲染图片卡片 -->
+  </div>
+
+  <!-- 预览模态框 -->
+  <div class="modal" id="previewModal">
+    <div class="modal-content">
+      <button class="close-btn" id="closeModal">&times;</button>
+      <img src="" alt="预览图片" id="modalImg">
+      <div class="modal-nav-row">
+        <button class="nav-btn" id="prevImg" title="上一张">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="28" height="28" rx="7" fill="none"/>
+            <path d="M18 7L10 14L18 21" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="modal-caption" id="modalCaption"></div>
+        <button class="nav-btn" id="nextImg" title="下一张">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="28" height="28" rx="7" fill="none"/>
+            <path d="M10 7L18 14L10 21" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 自动生成不重复个性化文案
+    const imgList = [
+      'http://m.qpic.cn/psc?/V50NpBhL1VK1231fuzPX4P91lH1Xswv2/TmEUgtj9EK6.7V8ajmQrEPlv6uJwgBe7Z6URQnMvfysDesfw1WDfYkvKXcFgkZNucO4Cnj0Chx*h8D6klkNrMsGFZPRQREB8JM5BPQoPaok!/b&bo=YAlABmAJQAYBJwA!&rf=viewer_4&t=5',
+      'http://m.qpic.cn/psc?/V50NpBhL1VK1231fuzPX4P91lH1Xswv2/TmEUgtj9EK6.7V8ajmQrEBO8BO8XK*yJCTr4w.lg9XQ.Ap13hTwGd*iy4xLPN8CZuxjBUlb1QteRvH0Wacu9oB9GqNKFUpiT4fIX*9qb6E8!/b&bo=YAlABmAJQAYBJwA!&rf=viewer_4&t=5',
+      'http://m.qpic.cn/psc?/V50NpBhL1VK1231fuzPX4P91lH1Xswv2/TmEUgtj9EK6.7V8ajmQrEBO8BO8XK*yJCTr4w.lg9XTiAqmevx5h*dKh7rzTn0GvRSPclGgkv1LV7wGFYTUTBwg5p6Ok5KktI.w4AjPAl78!/b&bo=YAlABmAJQAYBByA!&rf=viewer_4&t=5',
+      'http://m.qpic.cn/psc?/V50NpBhL1VK1231fuzPX4P91lH1Xswv2/TmEUgtj9EK6.7V8ajmQrEPlv6uJwgBe7Z6URQnMvfysDesfw1WDfYkvKXcFgkZNucO4Cnj0Chx*h8D6klkNrMsGFZPRQREB8JM5BPQoPaok!/b&bo=YAlABmAJQAYBByA!&rf=viewer_4&t=5',
+      'http://m.qpic.cn/psc?/V50NpBhL1VK1231fuzPX4P91lH1Xswv2/TmEUgtj9EK6.7V8ajmQrEJ8bUSw2cyaCs*5Cmkyru4WzCtqHcVwa4cnXUPOPlqyP0RZPTC1XMepA5CEisuo6V1E7*lqjWvlnKBL7Ih9DdY8!/b&bo=YAlABmAJQAYBByA!&rf=viewer_4&t=5',
+      'http://m.qpic.cn/psc?/V50NpBhL1VK1231fuzPX4P91lH1Xswv2/TmEUgtj9EK6.7V8ajmQrEIbTCt9sV6hQ*x8mhT7iATx0WXKMNkhZvmJmjChoeockLt04aRapRSOt06eRUoWebisHnWMIp25o367Z1shKGxA!/b&bo=YAlABmAJQAYBByA!&rf=viewer_4&t=5',
+      'http://m.qpic.cn/psc?/V50NpBhL1VK1231fuzPX4P91lH1Xswv2/TmEUgtj9EK6.7V8ajmQrEL9thU38WxBtK9cXNeitgG.sQw6y5sNDQYiK6GaX9unmLAJe*HBGpxPdqIPxh5WzIgSiAgoiKUHH30QsfaLjfB0!/b&bo=YAlABmAJQAYBByA!&rf=viewer_4&t=5',
+      'http://m.qpic.cn/psc?/V50NpBhL1VK1231fuzPX4P91lH1Xswv2/TmEUgtj9EK6.7V8ajmQrEB8QcNePPJ*dqlTVunJS2A76dsFbjti.FRR8qMNjzINjqJdqQ.mO43wveZUzf*eheZtR1m2oS.QDpZ9F5bmAyWA!/b&bo=YAlABmAJQAYBByA!&rf=viewer_4&t=5',
+      'http://m.qpic.cn/psc?/V50NpBhL1VK1231fuzPX4P91lH1Xswv2/TmEUgtj9EK6.7V8ajmQrELKKvOXcjNwujcESa7dik9x3CxMnvaZr7ZTCDmw7vL0tf2E2s29rvm*p1U80Z3HRpAFG7vBSkVq.c8oZ2gbDMj4!/b&bo=QAZgCUAGYAkBByA!&rf=viewer_4&t=5',
+      'http://m.qpic.cn/psc?/V50NpBhL1VK1231fuzPX4P91lH1Xswv2/TmEUgtj9EK6.7V8ajmQrEArXnxuiZwcR.AFlLtApZ5mlZOIuKuPt95S8IjxWTb*a85JCjm1Jzf9ekmkZa4kNSk.BxyGrbTCxLkRLscwIByg!/b&bo=QAZgCUAGYAkBByA!&rf=viewer_4&t=5',
+      'http://m.qpic.cn/psc?/V50NpBhL1VK1231fuzPX4P91lH1Xswv2/TmEUgtj9EK6.7V8ajmQrEM5uZohsT3KjVyfZX.b0*HfEBnD3i25emgjcECREe3i1BaWBQRoz4N2.eJUpSsnN26*QvU0jGxfP*Z2*h8glp24!/b&bo=QAZgCUAGYAkBByA!&rf=viewer_4&t=5',
+      'http://m.qpic.cn/psc?/V50NpBhL1VK1231fuzPX4P91lH1Xswv2/TmEUgtj9EK6.7V8ajmQrEDYRqQjx5xf7rH82ednNe0aZKcFvdy3IuZflo..NSTfJM0eTRLmn5a.59ESbZk4OqVfoSIidYgjCt1ou78Nju7I!/b&bo=QAZgCUAGYAkBByA!&rf=viewer_4&t=5',
+      'http://m.qpic.cn/psc?/V50NpBhL1VK1231fuzPX4P91lH1Xswv2/TmEUgtj9EK6.7V8ajmQrEJbpjLUeu7Pn6S*b*YnRYzF8usZ8hnTRshdUQ5sLHVtcN7PVZFE1VZa2k49eRXgQ8OsB8U6OqnGcLeaa7G4MqrA!/b&bo=YAlABmAJQAYBByA!&rf=viewer_4&t=5',
+      'http://m.qpic.cn/psc?/V50NpBhL1VK1231fuzPX4P91lH1Xswv2/TmEUgtj9EK6.7V8ajmQrEAxgi6V89BAos1jWXbobFFWb03j**fJH3QfcpvmGTwfahl72KQEmBdas24BBSE9dmjimXL6IrtCeGRvgX3tkoek!/b&bo=QAZgCUAGYAkBByA!&rf=viewer_4&t=5',
+      'http://m.qpic.cn/psc?/V50NpBhL1VK1231fuzPX4P91lH1Xswv2/TmEUgtj9EK6.7V8ajmQrEL58.CJ3vU19m5a2fP6SMXkMpfBSAKfFEyXvstkW5ok68TZOsjxLABEhQelMEuAA0QfTiRx.1qFTPMbbTG4LVac!/b&bo=YAlABmAJQAYBByA!&rf=viewer_4&t=5',
+      'http://m.qpic.cn/psc?/V50NpBhL1VK1231fuzPX4P91lH1Xswv2/TmEUgtj9EK6.7V8ajmQrECTiBaak1LxkHxZGYvlL4SjTPQ9QcNNKw7Pjh9k6MP8e*3M8rSwPB9pF8Nb8WiF31RpU3j7wLJgJnSbPwGqTas8!/b&bo=QAZgCUAGYAkBByA!&rf=viewer_4&t=5',
+      'http://m.qpic.cn/psc?/V50NpBhL1VK1231fuzPX4P91lH1Xswv2/TmEUgtj9EK6.7V8ajmQrEOrnlHRo*ysBZA2sepQ2sajHX6znh5blmd8jXkgpCZRktEiV*fPto3w6239CHkJ6Y5BIJ7uCUCaUpvgcAqxHzTE!/b&bo=YAlABmAJQAYBByA!&rf=viewer_4&t=5',
+      'http://m.qpic.cn/psc?/V50NpBhL1VK1231fuzPX4P91lH1Xswv2/TmEUgtj9EK6.7V8ajmQrELB.j3Fr9Z0sytN*efh8OSBd33alSykmM.vyv7bJSy4uIKLKJnnMzMCLb.eeOBLYBSxlo8Pp5HltjfU5ma8p3OA!/b&bo=QAZgCUAGYAkBByA!&rf=viewer_4&t=5',
+      'http://m.qpic.cn/psc?/V50NpBhL1VK1231fuzPX4P91lH1Xswv2/TmEUgtj9EK6.7V8ajmQrEKRBpYKDlJM6iz3ML.3wnjLM6YO7fHZWwWx1HDbzlaWYiAOh0vSzx1PCke63RKX*Yesa53SJXrXbbCYBt7lCUoc!/b&bo=YAlABmAJQAYBByA!&rf=viewer_4&t=5',
+      'http://m.qpic.cn/psc?/V50NpBhL1VK1231fuzPX4P91lH1Xswv2/TmEUgtj9EK6.7V8ajmQrEI3WBnSqo1F5eU7a7GvetNwTL1podADqd8uggYAJK1rZz.qfpnp1FDGCxvJSN369ZzgxKKo9CVbR.VE0TgXUfUY!/b&bo=QAZgCUAGYAkBByA!&rf=viewer_4&t=5',
+      'http://m.qpic.cn/psc?/V50NpBhL1VK1231fuzPX4P91lH1Xswv2/TmEUgtj9EK6.7V8ajmQrEK5vQ68LfCsYgRAat2z8cPZAOkCIVcyC3NxWyl9TIm*mZtRiM7JNYYuJXBGvUAB.Cn5O1twZJZAiIIxtqIeP8xI!/b&bo=YAlABmAJQAYBByA!&rf=viewer_4&t=5',
+      'http://m.qpic.cn/psc?/V50NpBhL1VK1231fuzPX4P91lH1Xswv2/TmEUgtj9EK6.7V8ajmQrEOmEW1wYOzHWzheh7NFAdS4exvTzWugi4plWssCDiRRbAaF2.ApbdHAhSwtiPu33P7OPYlKaKURK3zgsgY7PwVk!/b&bo=QAZgCUAGYAkBByA!&rf=viewer_4&t=5',
+      'http://m.qpic.cn/psc?/V50NpBhL1VK1231fuzPX4P91lH1Xswv2/TmEUgtj9EK6.7V8ajmQrECVzAS4gkk6MdD..tI1s34VWTTOMESkJcaDpOa408aU0zeHOhAQivS0BD6iD3HJyovBIIWKaebvIzCct8G673ck!/b&bo=QAZgCUAGYAkBByA!&rf=viewer_4&t=5',
+      'http://m.qpic.cn/psc?/V50NpBhL1VK1231fuzPX4P91lH1Xswv2/TmEUgtj9EK6.7V8ajmQrEG0NwJuYW3hRFE4HtFYV3DE5I91yEg5YyKtOE12nkRg28JP3T*ju0ZuY8NE*X4Wrk490wUhiZF8DKXYgJlkxfWQ!/b&bo=YAlABmAJQAYBByA!&rf=viewer_4&t=5',
+      'http://m.qpic.cn/psc?/V50NpBhL1VK1231fuzPX4P91lH1Xswv2/TmEUgtj9EK6.7V8ajmQrEI8OCANKkYi9*3XNHu*ErXKnmeLVQuLkUNu0KSrKTTttLsnCX5V.wgVwFvPmXdSnRfoqIurNr9wEGXSWlTQl.b8!/b&bo=YAlABmAJQAYBByA!&rf=viewer_4&t=5',
+      'http://m.qpic.cn/psc?/V50NpBhL1VK1231fuzPX4P91lH1Xswv2/TmEUgtj9EK6.7V8ajmQrEO8oBp08rbVIDzjxx4c1vwgt66bdSUVcHtqoN0XWPpg8oviX*i5Rsa4N2wMQwoe*Ijo.yIX.mv5jum5RulegvF4!/b&bo=QAZgCUAGYAkBByA!&rf=viewer_4&t=5',
+    ];
+    // 生成不重复个性化文案（数量与图片一致）
+    const baseCaptions = [
+      '阳光洒落的午后，定格最温暖的笑容。',
+      '青春的足迹，留在每一片绿意中。',
+      '微风轻拂，记忆随风飘远又归来。',
+      '与你相伴的时光，都是最美的风景。',
+      '一抹蓝天，承载着我们的梦想。',
+      '岁月静好，温柔了每一个瞬间。',
+      '远方的山水，见证我们的成长。',
+      '每一次回眸，都是心底的悸动。',
+      '花开半夏，故事悄然绽放。',
+      '时光流转，记忆依旧清晰。',
+      '旅途中的风景，都是心灵的礼物。',
+      '笑容如初，温暖依旧。',
+      '一场雨后，世界更清新。',
+      '夜色温柔，星光点亮心愿。',
+      '相遇是最美的意外。',
+      '每一张照片，都是一段故事。',
+      '心中的花园，永远盛开。',
+      '陪你走过的路，都是风景。',
+      '时光不语，记忆有声。',
+      '愿所有美好如期而至。',
+      '青春不散场，回忆常新。',
+      '一杯清茶，一段温柔时光。',
+      '风吹过的地方，都是回忆。',
+      '每一次微笑，都是幸福的证明。',
+      '世界很大，幸好有你。',
+      '温暖的光，照亮前行的路。',
+      '心跳的瞬间，定格在照片里。',
+      '愿你被世界温柔以待。',
+      '最美的风景，是你在身旁。',
+      '时光如歌，岁月如诗。',
+      '每一帧画面，都是心动。',
+      '愿所有美好都能被收藏。',
+      '回忆如星，点亮夜空。',
+      '一路有你，温暖如初。',
+      '每一次相聚，都是幸福。',
+      '时光不老，我们不散。',
+      '愿你笑容常在，幸福常伴。',
+      '最美的遇见，留在心间。',
+      '岁月如诗，温柔如你。',
+      '每一张照片，都是爱的见证。',
+      '愿你前路光明，心中有爱。',
+      '美好如初，温暖如光。',
+      '心有繁花，岁月静好。',
+      '时光温柔，故事悠长。',
+      '每一刻都值得被珍藏。',
+      '愿你眼里有光，心中有梦。',
+      '陪伴是最长情的告白。',
+      '回忆如诗，温暖如歌。',
+      '世界因你而美丽。',
+      '愿你笑靥如花，幸福常在。'
+    ];
+    // 保证每张图片文案唯一
+    const captions = imgList.map((_, idx) => {
+      if (idx < baseCaptions.length) return baseCaptions[idx];
+      return `专属回忆 #${idx + 1}，愿美好常伴你左右。`;
+    });
+    const albumData = imgList.map((url, idx) => ({
+      url,
+      caption: captions[idx]
+    }));
+
+    // 自动生成卡片
+    const albumGrid = document.getElementById('albumGrid');
+    let currentIdx = 0;
+    function showModal(idx) {
+      currentIdx = idx;
+      document.getElementById('modalImg').src = albumData[idx].url;
+      document.getElementById('modalCaption').textContent = albumData[idx].caption;
+      document.getElementById('previewModal').classList.add('active');
+    }
+    albumData.forEach((item, idx) => {
+      const card = document.createElement('div');
+      card.className = 'album-card';
+      card.innerHTML = `
+        <img src="${item.url}" alt="回忆照片${idx+1}">
+        <div class="caption">${item.caption}</div>
+      `;
+      // 点击预览
+      card.addEventListener('click', () => {
+        showModal(idx);
+      });
+      albumGrid.appendChild(card);
+    });
+
+    // 关闭预览
+    document.getElementById('closeModal').onclick = () => {
+      document.getElementById('previewModal').classList.remove('active');
+    };
+    // 点击模态框背景关闭
+    document.getElementById('previewModal').onclick = e => {
+      if (e.target === e.currentTarget) {
+        document.getElementById('previewModal').classList.remove('active');
+      }
+    };
+    // 上一张/下一张切换
+    document.getElementById('prevImg').onclick = e => {
+      e.stopPropagation();
+      currentIdx = (currentIdx - 1 + albumData.length) % albumData.length;
+      showModal(currentIdx);
+    };
+    document.getElementById('nextImg').onclick = e => {
+      e.stopPropagation();
+      currentIdx = (currentIdx + 1) % albumData.length;
+      showModal(currentIdx);
+    };
+  </script>
+</body>
+</html>

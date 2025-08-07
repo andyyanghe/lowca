@@ -21,6 +21,16 @@ body {
 .photo-container {
   width: 100%;
   margin: 20px 0 20px 0;
+  position: relative;
+  overflow: hidden;
+  transform: translateY(30px);
+  opacity: 0;
+  transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+.photo-container.visible {
+  transform: translateY(0);
+  opacity: 1;
 }
 
 /* 确保图片完整显示 */
@@ -29,6 +39,37 @@ body {
   height: auto;
   object-fit: contain;
   display: block;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.8s ease, transform 0.5s ease;
+}
+
+.scenery.loaded {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.photo-container:hover .scenery {
+  transform: scale(1.03);
+}
+
+.photo-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.7));
+  color: white;
+  font-family: 'Arial', sans-serif;
+  font-size: 14px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.photo-container:hover .photo-caption {
+  opacity: 1;
 }
 /* 响应式调整 */
 @media screen and (max-width: 1000px) {
@@ -38,7 +79,6 @@ body {
 }
 
 .modal {
-  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -47,6 +87,14 @@ body {
   background-color: rgba(0, 0, 0, 0.9);
   z-index: 1000;
   overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal.active {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .modal-content {
@@ -56,12 +104,18 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  transform: scale(0.8);
+  transition: transform 0.3s ease;
+}
+
+.modal.active .modal-content {
+  transform: scale(1);
 }
 
 .preview-image {
   max-width: 90%;
   max-height: 90%;
-  transition: transform 0.3s ease;
+  transition: transform 0.2s ease;
   transform-origin: center;
 }
 

@@ -421,28 +421,24 @@
       const previewModal = document.getElementById('previewModal');
       const modalInner = document.getElementById('modalInner');
       const modalContent = document.querySelector('.modal-content');
-      // 弹窗和内容区域始终先显示，图片加载时只隐藏图片本身
       const isFirstOpen = !previewModal.classList.contains('active');
       previewModal.classList.add('active');
-      if (isFirstOpen) {
-        modalInner.style.display = 'none';
-        modalContent.style.background = 'rgba(255,255,255,0)';
-      } else {
-        modalInner.style.display = '';
-        modalContent.style.background = 'rgba(255,255,255,0.96)';
-      }
+      // 1. 弹窗出现时，内容区域和图片都隐藏，背景透明
+      modalInner.style.display = 'none';
       modalImg.style.display = 'none';
+      modalContent.style.background = 'rgba(255,255,255,0)';
       modalImg.src = albumData[idx].url;
       modalCaption.textContent = albumData[idx].caption;
+      // 2. 图片加载完成后，内容区域、图片、背景色一起显示
       modalImg.onload = () => {
-        modalImg.style.display = '';
         modalInner.style.display = '';
+        modalImg.style.display = '';
         modalContent.style.background = 'rgba(255,255,255,0.96)';
       };
-      // 如果图片已缓存，立即显示
+      // 3. 如果图片已缓存，直接显示所有内容和背景色
       if (modalImg.complete && modalImg.naturalWidth > 0) {
-        modalImg.style.display = '';
         modalInner.style.display = '';
+        modalImg.style.display = '';
         modalContent.style.background = 'rgba(255,255,255,0.96)';
       }
     }

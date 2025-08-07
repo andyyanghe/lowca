@@ -171,7 +171,7 @@
       display: flex;
     }
     .modal-content {
-      background: rgba(255,255,255,0.96);
+      background: rgba(255,255,255,0);
       border-radius: 18px;
       box-shadow: 0 4px 40px rgba(0,0,0,0.10);
       max-width: 90vw;
@@ -181,6 +181,7 @@
       text-align: center;
       position: relative;
       animation: scaleUp 0.5s;
+      transition: background 0.2s;
     }
     .modal-content img {
       max-width: 100%;
@@ -419,13 +420,16 @@
       const modalCaption = document.getElementById('modalCaption');
       const previewModal = document.getElementById('previewModal');
       const modalInner = document.getElementById('modalInner');
+      const modalContent = document.querySelector('.modal-content');
       // 弹窗和内容区域始终先显示，图片加载时只隐藏图片本身
       const isFirstOpen = !previewModal.classList.contains('active');
       previewModal.classList.add('active');
       if (isFirstOpen) {
         modalInner.style.display = 'none';
+        modalContent.style.background = 'rgba(255,255,255,0)';
       } else {
         modalInner.style.display = '';
+        modalContent.style.background = 'rgba(255,255,255,0.96)';
       }
       modalImg.style.display = 'none';
       modalImg.src = albumData[idx].url;
@@ -433,11 +437,13 @@
       modalImg.onload = () => {
         modalImg.style.display = '';
         modalInner.style.display = '';
+        modalContent.style.background = 'rgba(255,255,255,0.96)';
       };
       // 如果图片已缓存，立即显示
       if (modalImg.complete && modalImg.naturalWidth > 0) {
         modalImg.style.display = '';
         modalInner.style.display = '';
+        modalContent.style.background = 'rgba(255,255,255,0.96)';
       }
     }
     albumData.forEach((item, idx) => {

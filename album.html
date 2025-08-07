@@ -413,24 +413,31 @@
     // 自动生成卡片
     const albumGrid = document.getElementById('albumGrid');
     let currentIdx = 0;
-    function showModal(idx) {
+    function showModal(idx, flag) {
       currentIdx = idx;
       const modalImg = document.getElementById('modalImg');
       const modalCaption = document.getElementById('modalCaption');
       const previewModal = document.getElementById('previewModal');
       const modalInner = document.getElementById('modalInner');
       // 弹窗和内容区域始终先显示，图片加载时只隐藏图片本身
+      const isFirstOpen = !previewModal.classList.contains('active');
       previewModal.classList.add('active');
-      modalInner.style.display = '';
+      if (isFirstOpen) {
+        modalInner.style.display = 'none';
+      } else {
+        modalInner.style.display = '';
+      }
       modalImg.style.display = 'none';
       modalImg.src = albumData[idx].url;
       modalCaption.textContent = albumData[idx].caption;
       modalImg.onload = () => {
         modalImg.style.display = '';
+        modalInner.style.display = '';
       };
       // 如果图片已缓存，立即显示
       if (modalImg.complete && modalImg.naturalWidth > 0) {
         modalImg.style.display = '';
+        modalInner.style.display = '';
       }
     }
     albumData.forEach((item, idx) => {

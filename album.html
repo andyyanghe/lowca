@@ -297,6 +297,7 @@
   <!-- 预览模态框 -->
   <div class="modal" id="previewModal">
     <div class="modal-content">
+      <div id="modalLoading" style="display:none; text-align:center; font-size:1.2em; color:#26a69a; padding:2em;">加载中...</div>
       <div id="modalInner" style="display:none;">
         <button class="close-btn" id="closeModal">&times;</button>
         <img src="" alt="预览图片" id="modalImg" style="display:none;">
@@ -421,22 +422,25 @@
       const previewModal = document.getElementById('previewModal');
       const modalInner = document.getElementById('modalInner');
       const modalContent = document.querySelector('.modal-content');
-      const isFirstOpen = !previewModal.classList.contains('active');
+      const modalLoading = document.getElementById('modalLoading');
       previewModal.classList.add('active');
-      // 1. 弹窗出现时，内容区域和图片都隐藏，背景透明
+      // 1. 弹窗出现时，loading显示，内容区域和图片都隐藏，背景透明
+      modalLoading.style.display = '';
       modalInner.style.display = 'none';
       modalImg.style.display = 'none';
       modalContent.style.background = 'rgba(255,255,255,0)';
       modalImg.src = albumData[idx].url;
       modalCaption.textContent = albumData[idx].caption;
-      // 2. 图片加载完成后，内容区域、图片、背景色一起显示
+      // 2. 图片加载完成后，隐藏loading，显示内容区域、图片、背景色
       modalImg.onload = () => {
+        modalLoading.style.display = 'none';
         modalInner.style.display = '';
         modalImg.style.display = '';
         modalContent.style.background = 'rgba(255,255,255,0.96)';
       };
       // 3. 如果图片已缓存，直接显示所有内容和背景色
       if (modalImg.complete && modalImg.naturalWidth > 0) {
+        modalLoading.style.display = 'none';
         modalInner.style.display = '';
         modalImg.style.display = '';
         modalContent.style.background = 'rgba(255,255,255,0.96)';

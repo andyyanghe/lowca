@@ -128,7 +128,7 @@
       box-shadow: 0 4px 24px rgba(0,0,0,0.10);
       overflow: hidden;
       transition: transform 0.3s, box-shadow 0.3s;
-      cursor: pointer;
+      cursor: none;
       position: relative;
     }
     .album-card:hover {
@@ -157,21 +157,24 @@
     }
     /* 炫酷模态预览 */
     .modal {
-      display: none;
+      opacity: 0;
       position: fixed;
-      z-index: 99;
+      z-index: -1;
       left: 0; top: 0; width: 100vw; height: 100vh;
       background: rgba(34,193,195,0.20);
       backdrop-filter: blur(8px);
       align-items: center;
       justify-content: center;
       animation: fadeIn 0.5s;
-    }
-    .modal.active {
       display: flex;
     }
+    .modal.active {
+      opacity: 1;
+      z-index: 99;
+
+    }
     .modal-content {
-      background: rgba(255,255,255,0);
+      background: rgba(255,255,255,1);
       border-radius: 18px;
       box-shadow: 0 4px 40px rgba(0,0,0,0.10);
       max-width: 90vw;
@@ -199,12 +202,12 @@
       text-align: center;
     }
     .close-btn {
-      position: absolute;
-      top: 1em;
-      right: 1.5em;
+      position: fixed;
+      top: 0.5em;
+      right: 0.5em;
       font-size: 2em;
       color: #0ba29d;
-      cursor: pointer;
+      cursor: none;
       transition: color 0.2s;
       font-weight: bold;
       background: none;
@@ -229,12 +232,10 @@
     .modal-nav-row {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      width: 100%;
-      min-width: 320px;
-      max-width: 600px;
-      margin: 0 auto 0 auto;
-      height: auto;
+      position: fixed;
+      bottom: 30px;
+      left: 24px;
+      right: 24px;
     }
     .nav-btn {
       width: 48px;
@@ -263,11 +264,6 @@
       /* 无需定位 */
     }
     @media (max-width: 600px) {
-      .modal-nav-row {
-        min-width: 0;
-        max-width: 100vw;
-        padding: 0 0.5em;
-      }
       .nav-btn {
         width: 38px;
         height: 38px;
@@ -297,10 +293,10 @@
   <!-- 预览模态框 -->
   <div class="modal" id="previewModal">
     <div class="modal-content">
-      <div id="modalLoading" style="display:none; text-align:center; font-size:1.2em; color:#26a69a; padding:2em;">加载中...</div>
-      <div id="modalInner" style="display:none;">
+      <div id="modalInner">
         <button class="close-btn" id="closeModal">&times;</button>
-        <img src="" alt="预览图片" id="modalImg" style="display:none;">
+        <img src="" alt="预览图片" id="modalImg">
+        <div class="modal-caption" id="modalCaption"></div>
         <div class="modal-nav-row">
         <button class="nav-btn" id="prevImg" title="上一张">
           <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -308,7 +304,7 @@
             <path d="M18 7L10 14L18 21" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
-        <div class="modal-caption" id="modalCaption"></div>
+
         <button class="nav-btn" id="nextImg" title="下一张">
           <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="28" height="28" rx="7" fill="none"/>
@@ -417,34 +413,11 @@
     let currentIdx = 0;
     function showModal(idx, flag) {
       currentIdx = idx;
-      const modalImg = document.getElementById('modalImg');
       const modalCaption = document.getElementById('modalCaption');
       const previewModal = document.getElementById('previewModal');
-      const modalInner = document.getElementById('modalInner');
-      const modalContent = document.querySelector('.modal-content');
-      const modalLoading = document.getElementById('modalLoading');
       previewModal.classList.add('active');
-      // 1. 弹窗出现时，loading显示，内容区域和图片都隐藏，背景透明
-      modalLoading.style.display = '';
-      modalInner.style.display = 'none';
-      modalImg.style.display = 'none';
-      modalContent.style.background = 'rgba(255,255,255,0)';
       modalImg.src = albumData[idx].url;
       modalCaption.textContent = albumData[idx].caption;
-      // 2. 图片加载完成后，隐藏loading，显示内容区域、图片、背景色
-      modalImg.onload = () => {
-        modalLoading.style.display = 'none';
-        modalInner.style.display = '';
-        modalImg.style.display = '';
-        modalContent.style.background = 'rgba(255,255,255,0.96)';
-      };
-      // 3. 如果图片已缓存，直接显示所有内容和背景色
-      if (modalImg.complete && modalImg.naturalWidth > 0) {
-        modalLoading.style.display = 'none';
-        modalInner.style.display = '';
-        modalImg.style.display = '';
-        modalContent.style.background = 'rgba(255,255,255,0.96)';
-      }
     }
     albumData.forEach((item, idx) => {
       const card = document.createElement('div');

@@ -414,9 +414,20 @@
     let currentIdx = 0;
     function showModal(idx) {
       currentIdx = idx;
-      document.getElementById('modalImg').src = albumData[idx].url;
-      document.getElementById('modalCaption').textContent = albumData[idx].caption;
-      document.getElementById('previewModal').classList.add('active');
+      const modalImg = document.getElementById('modalImg');
+      const modalCaption = document.getElementById('modalCaption');
+      const previewModal = document.getElementById('previewModal');
+      previewModal.classList.remove('active'); // 先隐藏，等待图片加载
+      modalImg.src = albumData[idx].url;
+      modalCaption.textContent = albumData[idx].caption;
+      // 监听图片加载完成再显示弹窗
+      modalImg.onload = () => {
+        previewModal.classList.add('active');
+      };
+      // 如果图片已缓存，立即显示
+      if (modalImg.complete) {
+        previewModal.classList.add('active');
+      }
     }
     albumData.forEach((item, idx) => {
       const card = document.createElement('div');

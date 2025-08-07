@@ -296,9 +296,10 @@
   <!-- 预览模态框 -->
   <div class="modal" id="previewModal">
     <div class="modal-content">
-      <button class="close-btn" id="closeModal">&times;</button>
-      <img src="" alt="预览图片" id="modalImg" style="display:none;">
-      <div class="modal-nav-row">
+      <div id="modalInner" style="display:none;">
+        <button class="close-btn" id="closeModal">&times;</button>
+        <img src="" alt="预览图片" id="modalImg" style="display:none;">
+        <div class="modal-nav-row">
         <button class="nav-btn" id="prevImg" title="上一张">
           <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="28" height="28" rx="7" fill="none"/>
@@ -417,18 +418,19 @@
       const modalImg = document.getElementById('modalImg');
       const modalCaption = document.getElementById('modalCaption');
       const previewModal = document.getElementById('previewModal');
-      previewModal.classList.remove('active'); // 先隐藏弹窗
-      modalImg.style.display = 'none'; // 先隐藏图片
+      const modalInner = document.getElementById('modalInner');
+      // 弹窗和内容区域始终先显示，图片加载时只隐藏图片本身
+      previewModal.classList.add('active');
+      modalInner.style.display = '';
+      modalImg.style.display = 'none';
       modalImg.src = albumData[idx].url;
       modalCaption.textContent = albumData[idx].caption;
       modalImg.onload = () => {
         modalImg.style.display = '';
-        previewModal.classList.add('active');
       };
       // 如果图片已缓存，立即显示
       if (modalImg.complete && modalImg.naturalWidth > 0) {
         modalImg.style.display = '';
-        previewModal.classList.add('active');
       }
     }
     albumData.forEach((item, idx) => {

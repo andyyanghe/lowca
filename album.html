@@ -297,7 +297,7 @@
   <div class="modal" id="previewModal">
     <div class="modal-content">
       <button class="close-btn" id="closeModal">&times;</button>
-      <img src="" alt="预览图片" id="modalImg">
+      <img src="" alt="预览图片" id="modalImg" style="display:none;">
       <div class="modal-nav-row">
         <button class="nav-btn" id="prevImg" title="上一张">
           <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -417,15 +417,17 @@
       const modalImg = document.getElementById('modalImg');
       const modalCaption = document.getElementById('modalCaption');
       const previewModal = document.getElementById('previewModal');
-      previewModal.classList.remove('active'); // 先隐藏，等待图片加载
+      previewModal.classList.remove('active'); // 先隐藏弹窗
+      modalImg.style.display = 'none'; // 先隐藏图片
       modalImg.src = albumData[idx].url;
       modalCaption.textContent = albumData[idx].caption;
-      // 监听图片加载完成再显示弹窗
       modalImg.onload = () => {
+        modalImg.style.display = '';
         previewModal.classList.add('active');
       };
       // 如果图片已缓存，立即显示
-      if (modalImg.complete) {
+      if (modalImg.complete && modalImg.naturalWidth > 0) {
+        modalImg.style.display = '';
         previewModal.classList.add('active');
       }
     }
